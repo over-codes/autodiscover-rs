@@ -16,10 +16,15 @@ fn main() -> std::io::Result<()> {
     let socket = listener.local_addr()?;
     thread::spawn(move || {
         // this function blocks forever; running it a seperate thread
-        autodiscover_rs::run(&socket, Method::Multicast("[ff0e::1]:1337".parse().unwrap()), |s| {
-            // change this to task::spawn if using async_std or tokio
-            thread::spawn(|| handle_client(s));
-        }).unwrap();
+        autodiscover_rs::run(
+            &socket,
+            Method::Multicast("[ff0e::1]:1337".parse().unwrap()),
+            |s| {
+                // change this to task::spawn if using async_std or tokio
+                thread::spawn(|| handle_client(s));
+            },
+        )
+        .unwrap();
     });
     let mut incoming = listener.incoming();
     while let Some(stream) = incoming.next() {

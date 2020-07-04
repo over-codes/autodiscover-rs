@@ -14,10 +14,15 @@ fn main() -> std::io::Result<()> {
     let listener = TcpListener::bind("0.0.0.0:0")?;
     let socket = listener.local_addr()?;
     thread::spawn(move || {
-            autodiscover_rs::run(&socket, Method::Broadcast("255.255.255.255:2020".parse().unwrap()), |s| {
+        autodiscover_rs::run(
+            &socket,
+            Method::Broadcast("255.255.255.255:2020".parse().unwrap()),
+            |s| {
                 // change this to be async if using tokio or async_std
                 thread::spawn(|| handle_client(s));
-        }).unwrap();
+            },
+        )
+        .unwrap();
     });
     let mut incoming = listener.incoming();
     while let Some(stream) = incoming.next() {
