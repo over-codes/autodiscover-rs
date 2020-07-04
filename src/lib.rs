@@ -120,7 +120,7 @@ pub fn run<F: Fn(std::io::Result<TcpStream>)>(connect_to: &SocketAddr, method: M
             socket.set_reuse_address(true)?;
             socket.set_broadcast(true)?;
             socket.bind(&addr.into())?;
-            let socket: UdpSocket = socket.into_udp_socket().into();
+            let socket: UdpSocket = socket.into_udp_socket();
             socket.send_to(&to_bytes(connect_to), addr)?;
             handle_broadcast_message(socket, connect_to, &spawn_callback)?;
         },
@@ -128,7 +128,7 @@ pub fn run<F: Fn(std::io::Result<TcpStream>)>(connect_to: &SocketAddr, method: M
             let socket = Socket::new(Domain::ipv6(), Type::dgram(), None)?;
             socket.set_reuse_address(true)?;
             socket.bind(&addr.into())?;
-            let socket: UdpSocket = socket.into_udp_socket().into();
+            let socket: UdpSocket = socket.into_udp_socket();
             match addr.ip() {
                 IpAddr::V4(addr) => {
                     let iface: Ipv4Addr = 0u32.into();
