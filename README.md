@@ -48,8 +48,6 @@ fn main() -> std::io::Result<()> {
 
 ## Notes
 
-By default, discover will spawn one thread per connection. This is not ideal, but is the only way to ensure we don't block on a bad client. If you use async, the cost of this is much lower.
-
 The algorithm for peer discovery is to:
 - Send a message to the broadcast/multicast address with the configured 'listen address' compressed to a 6 byte (IPv4) or 18 byte (IPv6) packet
 - Start listening for new messages on the broadcast/multicast address; when one is recv., connect to it and run the callback
@@ -71,3 +69,9 @@ IPv6:
 
     buff[0..16].clone_from_slice(&addr.ip().octets());
     buff[16..18].clone_from_slice(&addr.port().to_be_bytes());
+
+## TODO
+
+1. Provide features for async frameworks (such as async_std and tokio)
+2. Figure out some way of testing this
+3. Provides some mechanism to stop the thread listening for discovery
