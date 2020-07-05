@@ -1,18 +1,18 @@
 # autodiscover-rs
 
 autodiscover-rs implements a simple algorithm to detect peers on an
-IP network, connects to them, and calls back with the connected stream. The algorthm supports both UDP broadcast and multicasting.
+IP network, connects to them, and calls back with the connected stream. The algorithm supports both UDP broadcast and multicasting.
 
 ## Usage
 
 Cargo.toml
-```
+```toml
 autodiscover-rs = "0.1.0"
 ```
 
 In your app:
 
-```
+```Rust
 use std::net::{TcpListener, TcpStream};
 use std::thread;
 
@@ -62,13 +62,17 @@ The IP address we are broadcasting is of the form:
 
 IPv4:
 
-    buff[0..4].clone_from_slice(&addr.ip().octets());
-    buff[4..6].clone_from_slice(&addr.port().to_be_bytes());
+```Rust
+buff[0..4].clone_from_slice(&addr.ip().octets());
+buff[4..6].clone_from_slice(&addr.port().to_be_bytes());
+```
 
 IPv6:
 
-    buff[0..16].clone_from_slice(&addr.ip().octets());
-    buff[16..18].clone_from_slice(&addr.port().to_be_bytes());
+```Rust
+buff[0..16].clone_from_slice(&addr.ip().octets());
+buff[16..18].clone_from_slice(&addr.port().to_be_bytes());
+```
 
 ## TODO
 
