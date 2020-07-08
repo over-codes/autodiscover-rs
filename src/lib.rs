@@ -123,7 +123,8 @@ pub fn run<F: Fn(std::io::Result<TcpStream>)>(
             socket.set_broadcast(true)?;
             socket.bind(&addr.into())?;
             let socket: UdpSocket = socket.into_udp_socket();
-            socket.send_to(&to_bytes(connect_to), addr)?;
+            let result = socket.send_to(&to_bytes(connect_to), addr)?;
+            trace!("sent {} byte announcement to {:?}", result, addr);
             handle_broadcast_message(socket, connect_to, &spawn_callback)?;
         }
         Method::Multicast(addr) => {
@@ -144,7 +145,7 @@ pub fn run<F: Fn(std::io::Result<TcpStream>)>(
             {
                 let socket = UdpSocket::bind(":::0")?;
                 let result = socket.send_to(&to_bytes(connect_to), addr)?;
-                warn!("sent {} bytes to {:?}", result, addr);
+                trace!("sent {} byte announcement to {:?}", result, addr);
             }
             handle_broadcast_message(socket, connect_to, &spawn_callback)?;
         }
